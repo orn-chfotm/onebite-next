@@ -3,16 +3,36 @@ import SearchableLayout from "@/components/searchable-layout";
 import style from "./index.module.css";
 import { ReactNode } from "react";
 import BookItem from "../components/book-item";
-import { InferGetServerSidePropsType } from "next";
+import { InferGetStaticPropsType } from "next";
 import fetchBooks from "@/lib/fetch-books";
 import fetchRandomBooks from "@/lib/fetch-random-books";
 
 // getServerSideProps 예약된 함수명 SSR 처리
 // 사전 렌더링 단계에서 딱 한번만 실행 - 오직 서버 측에서만 실행되는  함수
 // 컴포넌트보다 먼저 실행되어서, 컴포넌트에 필요한 데이터를 불러오는 함수
-export const getServerSideProps = async () => {
-  // const allBooks = await fetchBooks();
-  // const recoBooks = await fetchRandomBooks();
+// SSR 방식 - getServerSideProps
+// export const getServerSideProps = async () => {
+//   // const allBooks = await fetchBooks();
+//   // const recoBooks = await fetchRandomBooks();
+
+//   // 비동기 병렬 처리
+//   const [allBooks, recoBooks] = await Promise.all([
+//     fetchBooks(),
+//     fetchRandomBooks(),
+//   ]);
+
+//   // return은 반드시 props라는 객체 프로퍼티를 포함하는 단 하나의 객체
+//   return {
+//     props: {
+//       allBooks,
+//       recoBooks,
+//     },
+//   };
+// };
+
+// SSG 방식 - getStaticProps
+export const getStaticProps = async () => {
+  console.log("인덱스 페이지");
 
   // 비동기 병렬 처리
   const [allBooks, recoBooks] = await Promise.all([
@@ -34,14 +54,11 @@ export const getServerSideProps = async () => {
 export default function Home({
   allBooks,
   recoBooks,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   // 브라우저 단에서만 실행되어야 할 코드는 useEffect()를 사용하자
   // useEffect(() => {
   //   console.log(window);
   // }, []);
-
-  console.log(allBooks);
-  console.log(recoBooks);
 
   return (
     <div className={style.container}>

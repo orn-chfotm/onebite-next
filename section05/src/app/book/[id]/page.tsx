@@ -3,6 +3,7 @@ import style from "./page.module.css";
 import { notFound } from "next/navigation";
 
 // export const dynamicParams = false;
+// generateStaticParams return 경로에 해당하지 않는 페이지는 없는 페이지 -> http status 404
 
 export function generateStaticParams() {
   return [{ id: "1" }, { id: "2" }, { id: "3" }];
